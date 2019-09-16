@@ -10,13 +10,15 @@ import javax.persistence.Table;
 import java.util.Set;
 
 @Entity
-@Table(name = "ProductCategory")
+@Table(name = "Product_Category")
 @Data //using lombok
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductCategory extends BaseEntity<Long> {
     @Column(name = "name")
     private String name;
     @Column(name = "description")
     private String description;
-    @OneToMany(mappedBy = "productcategory")
-    private Set<Product> created;
+//    @OneToMany(mappedBy = "productcategory")
+//    private Set<Product> created;
 }

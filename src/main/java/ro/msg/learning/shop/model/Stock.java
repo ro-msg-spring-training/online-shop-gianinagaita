@@ -15,14 +15,16 @@ public class Stock {
     @EmbeddedId
     StockKey id;
     @ManyToOne
-    @MapsId("product_id")
-    @JoinColumn(name = "product_id")
+    //@MapsId("product_id")
+    @JoinColumn(name = "product_id", insertable = false,
+            updatable = false)
     Product product;
     @ManyToOne
-    @MapsId("location_id")
-    @JoinColumn(name = "location_id")
+   // @MapsId("location_id")
+    @JoinColumn(name = "location_id", insertable = false,
+            updatable = false)
     Location location;
-    //@Column(name = "quantity")
+    @Column(name = "quantity")
     private Integer quantity;
 
 

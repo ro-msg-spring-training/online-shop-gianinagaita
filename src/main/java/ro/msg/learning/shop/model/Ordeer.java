@@ -10,11 +10,16 @@ import java.util.Set;
 @Entity
 @Table(name = "Ordeer")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Ordeer extends BaseEntity<Long> {
     @ManyToOne
+    @JoinColumn(name = "ShippedFrom")
     private Location ShippedFrom;
     @ManyToOne
+    @JoinColumn(name = "Customer")
     private Customer customer;
+    @Column(name = "CreatedAt")
     private LocalDateTime createdAt;
     @OneToMany(mappedBy = "ordeer")
     Set<OrderDetail> orderDetails;

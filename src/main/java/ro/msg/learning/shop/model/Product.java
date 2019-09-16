@@ -1,9 +1,6 @@
 package ro.msg.learning.shop.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ro.msg.learning.shop.base.BaseEntity;
 
 import javax.persistence.*;
@@ -11,10 +8,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 @Entity
-@Table(name = "PRODUCT")
-@Getter @Setter @NoArgsConstructor @EqualsAndHashCode//using lombok
+@Data
+@Builder
+@AllArgsConstructor
+@Table(name = "Product")
+ @NoArgsConstructor //using lombok
 public class Product extends BaseEntity<Long> {
     @Column(name = "name", nullable = false)
     private String name;
@@ -24,26 +23,15 @@ public class Product extends BaseEntity<Long> {
     private BigDecimal price;
     @Column(name = "weight")
     private Double weight;
-    @Column(name = "imageUrl")
+    @Column(name = "image_Url")
     private String imageUrl;
-//    @ManyToMany(cascade = CascadeType.PERSIST)
-//    @JoinTable(name = "Stock",
-//            joinColumns = @JoinColumn(name = "Product", referencedColumnName = "id", nullable = false),
-//            inverseJoinColumns = @JoinColumn(name = "Location", referencedColumnName = "id", nullable = false)
-//    )
     @OneToMany(mappedBy = "product")
     Set<Stock> stocks;
     @OneToMany(mappedBy = "product")
     Set<OrderDetail> orderDetails;
     @ManyToOne
-    @JoinColumn(name = "Category")
-    private ProductCategory productcategory;
-    @ManyToMany(cascade = CascadeType.PERSIST)
-//    @JoinTable(name = "OrderDetail",
-//            joinColumns = @JoinColumn(name = "Product", referencedColumnName = "id", nullable = false),
-//            inverseJoinColumns = @JoinColumn(name = "Ordeer", referencedColumnName = "id", nullable = false)
-//    )
-
+    @JoinColumn(name = "Category_id")
+    private ProductCategory productCategory;
     @ManyToOne
     @JoinColumn(name = "Supplier")
     private Supplier supplier;

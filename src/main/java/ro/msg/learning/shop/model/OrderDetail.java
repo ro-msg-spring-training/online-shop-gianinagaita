@@ -15,11 +15,13 @@ public class OrderDetail {
     OrderDetailKey id;
     @ManyToOne
     @MapsId("product_id")
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", insertable = false,
+            updatable = false)
     Product product;
     @ManyToOne
     @MapsId("ordeer_id")
-    @JoinColumn(name = "ordeer_id")
+    @JoinColumn(name = "ordeer_id", insertable = false,
+            updatable = false)
     Ordeer ordeer;
     private Integer quantity;
 }
