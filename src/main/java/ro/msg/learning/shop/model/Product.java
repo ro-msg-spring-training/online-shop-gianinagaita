@@ -5,15 +5,15 @@ import ro.msg.learning.shop.base.BaseEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @Table(name = "Product")
- @NoArgsConstructor //using lombok
+@NoArgsConstructor //using lombok
 public class Product extends BaseEntity<Long> {
     @Column(name = "name", nullable = false)
     private String name;
@@ -25,10 +25,10 @@ public class Product extends BaseEntity<Long> {
     private Double weight;
     @Column(name = "image_Url")
     private String imageUrl;
-    @OneToMany(mappedBy = "product")
-    Set<Stock> stocks;
-    @OneToMany(mappedBy = "product")
-    Set<OrderDetail> orderDetails;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    List<Stock> stocks;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    List<OrderDetail> orderDetails;
     @ManyToOne
     @JoinColumn(name = "Category_id")
     private ProductCategory productCategory;

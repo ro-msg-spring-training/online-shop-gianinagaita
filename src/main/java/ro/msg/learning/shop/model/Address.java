@@ -1,6 +1,8 @@
 package ro.msg.learning.shop.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Embeddable;
 

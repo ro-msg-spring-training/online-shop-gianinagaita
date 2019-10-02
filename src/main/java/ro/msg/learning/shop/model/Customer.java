@@ -1,17 +1,11 @@
 package ro.msg.learning.shop.model;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.criterion.Order;
 import ro.msg.learning.shop.base.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.Set;
 
 @Entity
 @Table(name = "Customer")
@@ -27,6 +21,6 @@ public class Customer extends BaseEntity<Long> {
     private String password;
     @Column(name = "emailaddress")
     private String emailAddress;
-    @OneToMany(mappedBy = "customer")
-    private Set<Ordeer> created;
+//    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer")
+//    private Set<Ordeer> created;
 }

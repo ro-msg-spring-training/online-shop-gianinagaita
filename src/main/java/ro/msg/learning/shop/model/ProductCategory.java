@@ -1,13 +1,12 @@
 package ro.msg.learning.shop.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ro.msg.learning.shop.base.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import java.util.Set;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Product_Category")
@@ -19,6 +18,6 @@ public class ProductCategory extends BaseEntity<Long> {
     private String name;
     @Column(name = "description")
     private String description;
-//    @OneToMany(mappedBy = "productcategory")
-//    private Set<Product> created;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productCategory")
+    private List<Product> created;
 }

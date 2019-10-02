@@ -1,26 +1,24 @@
 package ro.msg.learning.shop.model;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import ro.msg.learning.shop.base.BaseEntity;
+import lombok.*;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "Stock")
-@Data
+@Getter
+@Setter
 public class Stock {
     @EmbeddedId
-    StockKey id;
+    StockKey stockId;
     @ManyToOne
-    //@MapsId("product_id")
     @JoinColumn(name = "product_id", insertable = false,
             updatable = false)
     Product product;
     @ManyToOne
-   // @MapsId("location_id")
     @JoinColumn(name = "location_id", insertable = false,
             updatable = false)
     Location location;
