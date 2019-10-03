@@ -70,4 +70,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionMessage error = new ExceptionMessage(BAD_REQUEST, details);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(OrderNotFound.class)
+    public final ResponseEntity<ExceptionMessage> handleInvalidTraceIdException
+            (OrderNotFound ex, WebRequest request) {
+        List<String> details = new ArrayList<>();
+        details.add(ex.getLocalizedMessage());
+        ExceptionMessage error = new ExceptionMessage(BAD_REQUEST, details);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 }

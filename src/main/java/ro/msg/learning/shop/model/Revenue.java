@@ -11,11 +11,12 @@ import java.time.LocalDate;
 @Table(name = "Reveneu")
 @Data //using lombok
 public class Revenue extends BaseEntity<Long> {
+    @ManyToOne
+    @JoinColumn(name = "Location")
+    private Location location;
     @Column(name = "tdate")
     private LocalDate date;
     @Column(name = "sum")
     private BigDecimal sum;
-    @ManyToOne
-    @JoinColumn(name = "Location")
-    private Location location;
+
 }

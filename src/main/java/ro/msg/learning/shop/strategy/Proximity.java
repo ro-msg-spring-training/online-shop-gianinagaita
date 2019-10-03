@@ -20,8 +20,6 @@ public class Proximity implements Strategy {
     private CustomerRepository costumerRepository;
     private OrderRepository orderRepository;
     private StockRepository stockRepository;
-
-    //give me the list in order of the closed location
     @Override
     public List<Ordeer> createOrder(OrderDTOCreation orderDTOCreation) {
         List<ResponseProximityStrategy> responseProximityStrategies = generatingOrder(orderDTOCreation);
@@ -91,7 +89,7 @@ public class Proximity implements Strategy {
             map.put(distanceBetweenLocations.get(i), alllocations.get(i));
         }
         sortbykey(map);
-        //returnic the list of locations in order of distance
+        //returning the list of locations in order of distance
         return getListOfLocationInOrderOfDistance(map);
     }
 
