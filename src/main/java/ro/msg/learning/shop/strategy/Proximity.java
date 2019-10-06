@@ -134,15 +134,8 @@ public class Proximity implements Strategy {
     }
    public boolean verifyIfAllQunatitiesAreZero(List<ProductQuantity> productQuantities){
         int x=0;
-       // productQuantities.stream().allMatch(productQuantity -> productQuantity.getQuantity()==0);
-       for (ProductQuantity p : productQuantities) {
-           if (p.getQuantity() == 0) x = 1;
-           else {
-               x = 0;
-           }
-       }
-       if (x==1) return true;
-       else return false;
+       return productQuantities.stream().allMatch(productQuantity -> productQuantity.getQuantity()==0);
+
     }
 }
 
