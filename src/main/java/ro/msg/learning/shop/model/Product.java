@@ -30,7 +30,7 @@ public class Product extends BaseEntity<Long> {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     List<OrderDetail> orderDetails;
     @ManyToOne
-    @JoinColumn(name = "Category_id")
+    @JoinColumn(name = "Category_id") //exactly the name from db
     private ProductCategory productCategory;
     @ManyToOne
     @JoinColumn(name = "Supplier")

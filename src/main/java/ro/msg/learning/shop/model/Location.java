@@ -25,8 +25,5 @@ public class Location extends BaseEntity<Long> {
 
     })
     private Address address;
-//    @OneToMany(cascade = CascadeType.ALL,mappedBy = "location")
-//    List<Stock> stocks;
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ShippedFrom")
-//    private List<Ordeer> created;
+
 }

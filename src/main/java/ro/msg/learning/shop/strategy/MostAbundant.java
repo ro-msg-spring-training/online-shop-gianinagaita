@@ -82,7 +82,6 @@ public class MostAbundant implements Strategy {
             initialquantity=0;
             finallocation.add(location);
         }
-
         return finallocation;
     }
 

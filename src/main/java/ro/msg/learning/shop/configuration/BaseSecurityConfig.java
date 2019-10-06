@@ -8,8 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ro.msg.learning.shop.services.MyUserDetailService;
 
 public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    PasswordEncoder passwordEncoder;
+//    @Autowired
+//    PasswordEncoder passwordEncoder;
     @Autowired
     MyUserDetailService userDetailService;
 

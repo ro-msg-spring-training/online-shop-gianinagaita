@@ -1,5 +1,4 @@
 package ro.msg.learning.shop.strategy;
-
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -11,6 +10,7 @@ import ro.msg.learning.shop.dto.*;
 import ro.msg.learning.shop.model.*;
 import ro.msg.learning.shop.repository.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 @AllArgsConstructor
 @Component
@@ -25,7 +25,7 @@ public class Proximity implements Strategy {
         List<ResponseProximityStrategy> responseProximityStrategies = generatingOrder(orderDTOCreation);
         List<Ordeer> ordeer = new ArrayList<>();
 
-        for (int i = 0; i <=responseProximityStrategies.size(); i++) {
+        for (int i = 0; i <responseProximityStrategies.size(); i++) {
             Address address = new Address();
             address.setCountry(orderDTOCreation.getAddress().getCountry());
             address.setStreetAddress(orderDTOCreation.getAddress().getStreetAddress());
@@ -40,35 +40,43 @@ public class Proximity implements Strategy {
 
     public List<ResponseProximityStrategy> generatingOrder(OrderDTOCreation orderDTOCreation) {
         List<ResponseProximityStrategy> responseProximityStrategies = new ArrayList<ResponseProximityStrategy>();
-        List<ProductQuantity> productQuantities = orderDTOCreation.getProductQunatityList(); //productquantity list of order
+      final   List<ProductQuantity> productQuantities = makingcopiesofOrderCreation(orderDTOCreation);
+        List<ProductQuantity> productQuantities2 = orderDTOCreation.getProductQunatityList();//productquantity list of order
         List<Location> locationList = getLocation(orderDTOCreation);//the list with the closed address
         int j = -1;
+        int x=0;
+        ProductQuantity index;
         int boughtquantity = 0;
+        ProductQuantity pq=null;
         int length = orderDTOCreation.getProductQunatityList().size();
-        while (productQuantities.size() != 0) {
+        x=productQuantities2.size();
+        while (x != 0) {
             j++;
-            for (int i = 0; i < length; i++) {
+            for (int i = 0; i <length; i++) {
                 Optional<Stock> stock = stockRepository.findStockByLocationIdAndProductId(locationList.get(j).getId(), productQuantities.get(i).getId());
                 Stock newstock;
                 if (stock.isPresent() && stock.get().getQuantity() > 0) {
                     newstock = stock.get();
-                    if ((newstock.getQuantity() - productQuantities.get(i).getQuantity()) > 0) {
-                        boughtquantity = newstock.getQuantity() - productQuantities.get(i).getQuantity();
-                        newstock.setQuantity(boughtquantity);
-                        productQuantities.remove(i);
-                        responseProximityStrategies.add(new ResponseProximityStrategy(locationList.get(j), productQuantities.get(i).getId(), productQuantities.get(i).getQuantity()));
-                    } else {
-                        boughtquantity = newstock.getQuantity();
-                        newstock.setQuantity(0);
-                        productQuantities.get(i).setQuantity(productQuantities.get(i).getQuantity() - boughtquantity);
-                        responseProximityStrategies.add(new ResponseProximityStrategy(locationList.get(j), productQuantities.get(i).getId(), boughtquantity));
+                    if(productQuantities2.get(i).getQuantity()>0) {
+                        if ((newstock.getQuantity() - productQuantities2.get(i).getQuantity()) > 0) {
+                            boughtquantity = newstock.getQuantity() - productQuantities2.get(i).getQuantity();
+                            newstock.setQuantity(boughtquantity);
+                            productQuantities2.get(i).setQuantity(0);
+                            responseProximityStrategies.add(new ResponseProximityStrategy(locationList.get(j), productQuantities2.get(i).getId(), productQuantities2.get(i).getQuantity()));
+                        } else {
+                            boughtquantity = newstock.getQuantity();
+                            newstock.setQuantity(0);
+                            productQuantities2.get(i).setQuantity(productQuantities2.get(i).getQuantity() - boughtquantity);
+                            responseProximityStrategies.add(new ResponseProximityStrategy(locationList.get(j), productQuantities2.get(i).getId(), boughtquantity));
 
+                        }
                     }
 
                 }
+                newstock=null;
             }
-            if (productQuantities.size() != 0) {
-                length = productQuantities.size();
+            if (verifyIfAllQunatitiesAreZero(productQuantities2)==true) {
+                x=0;
             }
         }
         return responseProximityStrategies;
@@ -115,7 +123,29 @@ public class Proximity implements Strategy {
         }
         return locationListinorder;
     }
+    public final  List<ProductQuantity> makingcopiesofOrderCreation(OrderDTOCreation orderDTOCreation) {
+        List<ProductQuantity> productQuantities = orderDTOCreation.getProductQunatityList();
+        List<ProductQuantity> finallist = new ArrayList<>();
+        for (ProductQuantity p : productQuantities) {
+            finallist.add(p);
+        }
+        return finallist;
+
+    }
+   public boolean verifyIfAllQunatitiesAreZero(List<ProductQuantity> productQuantities){
+        int x=0;
+       // productQuantities.stream().allMatch(productQuantity -> productQuantity.getQuantity()==0);
+       for (ProductQuantity p : productQuantities) {
+           if (p.getQuantity() == 0) x = 1;
+           else {
+               x = 0;
+           }
+       }
+       if (x==1) return true;
+       else return false;
+    }
 }
+
 
 
 

@@ -21,7 +21,8 @@ public class StrategyConfiguration {
                 return mostAbundant;
             case SINGLELOCATION:
                 return singleLocation;
-            case PROXIMITY:return proximity;
+            case PROXIMITY:
+                return proximity;
         }
         throw new IllegalArgumentException();
     }

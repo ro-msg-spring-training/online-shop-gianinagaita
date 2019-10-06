@@ -13,8 +13,8 @@ import java.io.Serializable;
 @Embeddable
 @Data
 public class StockKey implements Serializable {
-    @Column(name = "Product_id")
+    @Column(name = "product_id")
     Long productId;
-    @Column(name = "Location_id")
+    @Column(name = "location_id")
     Long locationId;
 }

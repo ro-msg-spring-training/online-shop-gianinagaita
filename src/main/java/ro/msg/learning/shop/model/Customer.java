@@ -21,6 +21,4 @@ public class Customer extends BaseEntity<Long> {
     private String password;
     @Column(name = "emailaddress")
     private String emailAddress;
-//    @OneToMany(cascade = CascadeType.ALL,mappedBy = "customer")
-//    private Set<Ordeer> created;
 }

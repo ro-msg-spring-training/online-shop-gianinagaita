@@ -1,5 +1,6 @@
 package ro.msg.learning.shop.services;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.dto.OrderDTOCreation;
@@ -17,8 +18,8 @@ import ro.msg.learning.shop.strategy.Strategy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-@AllArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class OrderServices {
     private final Strategy strategy;
 

@@ -15,7 +15,7 @@ import java.util.Date;
 @Builder
 public class Ordeer extends BaseEntity<Long> {
     @ManyToOne
-    @JoinColumn(name = "ShippedFrom")
+    @JoinColumn(name = "Shipped_From")
     private Location ShippedFrom;
     @ManyToOne
     @JoinColumn(name = "Customer")

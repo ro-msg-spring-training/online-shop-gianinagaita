@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
 @RequiredArgsConstructor
 @Configuration
 @ConditionalOnProperty(value = "securitytype", havingValue = "Basic")
