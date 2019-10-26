@@ -11,11 +11,11 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-public class RevenueController {
+public class ReveneuController {
     private final ReveneuServices reveneuServices;
 
-    @RequestMapping(value = "/reveneu", method = RequestMethod.GET)
-    public List<ReveneuDTO> getAllProducts() {
+    @RequestMapping(value = "/revenue", method = RequestMethod.GET)
+    public List<ReveneuDTO> getAllReveneus() {
         return reveneuServices.getAllDataForGivenData();
     }
 }

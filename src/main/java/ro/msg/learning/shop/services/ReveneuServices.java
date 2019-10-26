@@ -16,6 +16,7 @@ import ro.msg.learning.shop.repository.ReveneuRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,7 @@ public class ReveneuServices {
     public void aggregationSum() {
         List<Location> locations = locationRepository.findAll();
         LocalDate date = LocalDate.now().minusDays(1); //yesterday
+        List<Revenue> revenueList = new ArrayList<Revenue>();
         locations.forEach(location -> {
             long i = 0;
             BigDecimal sum = getSumOfTheLocation(location);
@@ -41,8 +43,9 @@ public class ReveneuServices {
             revenue1.setSum(sum);
             revenue1.setId(i);
             i++;
-            reveneuRepository.save(revenue1);
+            revenueList.add(revenue1);
         });
+        reveneuRepository.saveAll(revenueList);
     }
 
     public BigDecimal getSumOfTheLocation(Location location) {
@@ -53,7 +56,7 @@ public class ReveneuServices {
     public BigDecimal getSumOfTheOrder(Ordeer ordeer) {
         List<OrderDetail> orderDetailList = orderDetailRepository.findByOrdeer(ordeer);
         return orderDetailList.stream()
-                .map(orderDetail -> orderDetail.getProduct().getPrice())
+                .map(orderDetail -> orderDetail.getProduct().getPrice().multiply(new BigDecimal(orderDetail.getProduct().getWeight())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

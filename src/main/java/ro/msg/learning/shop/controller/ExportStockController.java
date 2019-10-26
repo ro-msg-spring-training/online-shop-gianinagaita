@@ -1,15 +1,14 @@
 package ro.msg.learning.shop.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import ro.msg.learning.shop.dto.StockDTO;
 import ro.msg.learning.shop.services.ExportStockServices;
 
+import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@Controller
 public class ExportStockController {
     private final ExportStockServices stockServices;
 
@@ -17,8 +16,8 @@ public class ExportStockController {
         this.stockServices = stockServices;
     }
 
-    @RequestMapping(value = "/exportStock/{id}", method = RequestMethod.GET)
-    public List<StockDTO> getExportedStock(@PathVariable("id") Long id) {
+    @GetMapping("/locations/{id}/stocks/export")
+    public List<StockDTO> getExportedStock(@Valid @RequestBody @PathVariable("id") Long id) {
         return stockServices.getExportedStock(id);
 
     }

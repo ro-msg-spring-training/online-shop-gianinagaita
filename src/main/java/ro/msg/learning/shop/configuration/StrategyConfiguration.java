@@ -14,8 +14,8 @@ import ro.msg.learning.shop.strategy.Strategy;
 //ConfigurationProperties e folosit intr un pojo separat si il injectez, cand am mai multe campuri
 //@ConfigurationProperties(prefix = "strategy")
 public class StrategyConfiguration {
-    @Bean
-    public Strategy strategy(@Value("${strategy.type}") StrategyType type, MostAbundant mostAbundant, SingleLocation singleLocation, Proximity proximity) {
+    @Bean("strategy")
+    public Strategy getstrategy(@Value("${strategy.type}") StrategyType type, MostAbundant mostAbundant, SingleLocation singleLocation, Proximity proximity) {
         switch (type) {
             case MOSTABUNDANT:
                 return mostAbundant;
@@ -23,7 +23,8 @@ public class StrategyConfiguration {
                 return singleLocation;
             case PROXIMITY:
                 return proximity;
+            default:
+                throw new IllegalArgumentException();
         }
-        throw new IllegalArgumentException();
     }
 }

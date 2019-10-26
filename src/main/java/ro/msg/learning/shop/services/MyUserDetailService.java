@@ -21,24 +21,19 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 public class MyUserDetailService implements UserDetailsService {
-    private CustomerRepository customerRepository;
-
     @Autowired
     PasswordEncoder passwordEncoder;
+    private CustomerRepository customerRepository;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Optional<Customer> customer = customerRepository.findCustomerByuserName(s);
-        if (customer.isPresent()) {
-            Customer customer1 = customer.get();
-            customer1.setPassword(passwordEncoder.encode(customer1.getPassword()));
-            String str = customer1.getPassword();
-            System.out.println(str);
-            //customerRepository.save(customer1);
-            return new User(customer1.getUserName(), customer1.getPassword(), getAuthorities(true));
-        } else {
-            throw new RecordNotFoundException("Username with this '" + s + "' does no exist");
-        }
+        customer.get().setPassword(passwordEncoder.encode(customer.get().getPassword()));
+        return customer
+                .map(u -> new User(customer.get().getUserName(), customer.get().getPassword(), getAuthorities(true)))
+                .orElseThrow(() -> new RecordNotFoundException(
+                        "Username with this '" + s + "' does not exist"));
+
     }
 
     private List<GrantedAuthority> getAuthorities(boolean isAdmin) {

@@ -11,10 +11,11 @@ public class ReveneuDTO {
     private Location location;
     private LocalDate date;
     private BigDecimal sum;
-    public ReveneuDTO(Revenue revenue){
-        this.id=revenue.getId();
-        this.date=revenue.getDate();
-        this.location=revenue.getLocation();
-        this.sum=revenue.getSum();
+
+    public ReveneuDTO(Revenue revenue) {
+        this.id = revenue.getId();
+        this.date = revenue.getDate();
+        this.location = revenue.getLocation();
+        this.sum = revenue.getSum();
     }
 }

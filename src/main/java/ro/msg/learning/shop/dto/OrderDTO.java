@@ -16,14 +16,14 @@ import java.util.Date;
 @Data
 public class OrderDTO extends BaseEntity<Long> {
     private Long id;
-    private Location ShippedFrom;
+    private Location shippedFrom;
     private Customer customer;
     private Date createdAt;
     private Address address;
 
     public OrderDTO(Ordeer ordeer) {
         this.id = ordeer.getId();
-        this.ShippedFrom = ordeer.getShippedFrom();
+        this.shippedFrom = ordeer.getShippedFrom();
         this.customer = ordeer.getCustomer();
         this.createdAt = ordeer.getCreatedAt();
         this.address = ordeer.getAddress();

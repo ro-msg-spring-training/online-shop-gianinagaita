@@ -17,8 +17,11 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     //   Optional<Long> findLocationIdFromStockByProductIdAndQuantityGreaterThanEqual(Long productId, Integer quantity);
 //MAKING WITH CREATION METHOD A QUERY TO DataBase
     Optional<Stock> findStockByLocationIdAndProductId(Long locationId, Long productId);
+
     List<Stock> findStockByProductId(Long productId);
+
     List<Stock> findStockByLocationId(Long locationId);
+
     @Query("SELECT s.quantity FROM Stock s where s.stockId.productId= :productId and s.stockId.locationId= :locationId")
     Integer findQuantityByProductIdAndLocationId(@Param("productId") Long productId, @Param("locationId") Long locationId);
 

@@ -1,4 +1,5 @@
 package ro.msg.learning.shop.strategy;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -6,12 +7,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ro.msg.learning.shop.configuration.RouteMatrix;
-import ro.msg.learning.shop.dto.*;
+import ro.msg.learning.shop.dto.DistanceRequestDTO;
+import ro.msg.learning.shop.dto.DistanceResponseDTO;
+import ro.msg.learning.shop.dto.OrderDTOCreation;
+import ro.msg.learning.shop.dto.ProductQuantity;
+import ro.msg.learning.shop.exceptions.RecordNotFoundException;
 import ro.msg.learning.shop.model.*;
-import ro.msg.learning.shop.repository.*;
+import ro.msg.learning.shop.repository.CustomerRepository;
+import ro.msg.learning.shop.repository.LocationRepository;
+import ro.msg.learning.shop.repository.OrderRepository;
+import ro.msg.learning.shop.repository.StockRepository;
+
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @Component
 public class Proximity implements Strategy {
@@ -20,12 +29,13 @@ public class Proximity implements Strategy {
     private CustomerRepository costumerRepository;
     private OrderRepository orderRepository;
     private StockRepository stockRepository;
+
     @Override
     public List<Ordeer> createOrder(OrderDTOCreation orderDTOCreation) {
         List<ResponseProximityStrategy> responseProximityStrategies = generatingOrder(orderDTOCreation);
         List<Ordeer> ordeer = new ArrayList<>();
 
-        for (int i = 0; i <responseProximityStrategies.size(); i++) {
+        for (int i = 0; i < responseProximityStrategies.size(); i++) {
             Address address = new Address();
             address.setCountry(orderDTOCreation.getAddress().getCountry());
             address.setStreetAddress(orderDTOCreation.getAddress().getStreetAddress());
@@ -40,24 +50,24 @@ public class Proximity implements Strategy {
 
     public List<ResponseProximityStrategy> generatingOrder(OrderDTOCreation orderDTOCreation) {
         List<ResponseProximityStrategy> responseProximityStrategies = new ArrayList<ResponseProximityStrategy>();
-      final   List<ProductQuantity> productQuantities = makingcopiesofOrderCreation(orderDTOCreation);
+        final List<ProductQuantity> productQuantities = makingcopiesofOrderCreation(orderDTOCreation);
         List<ProductQuantity> productQuantities2 = orderDTOCreation.getProductQunatityList();//productquantity list of order
         List<Location> locationList = getLocation(orderDTOCreation);//the list with the closed address
         int j = -1;
-        int x=0;
+        int x = 0;
         ProductQuantity index;
         int boughtquantity = 0;
-        ProductQuantity pq=null;
+        ProductQuantity pq = null;
         int length = orderDTOCreation.getProductQunatityList().size();
-        x=productQuantities2.size();
+        x = productQuantities2.size();
         while (x != 0) {
             j++;
-            for (int i = 0; i <length; i++) {
+            for (int i = 0; i < length; i++) {
                 Optional<Stock> stock = stockRepository.findStockByLocationIdAndProductId(locationList.get(j).getId(), productQuantities.get(i).getId());
                 Stock newstock;
                 if (stock.isPresent() && stock.get().getQuantity() > 0) {
                     newstock = stock.get();
-                    if(productQuantities2.get(i).getQuantity()>0) {
+                    if (productQuantities2.get(i).getQuantity() > 0) {
                         if ((newstock.getQuantity() - productQuantities2.get(i).getQuantity()) > 0) {
                             boughtquantity = newstock.getQuantity() - productQuantities2.get(i).getQuantity();
                             newstock.setQuantity(boughtquantity);
@@ -72,11 +82,13 @@ public class Proximity implements Strategy {
                         }
                     }
 
+                } else {
+                    throw new RecordNotFoundException("Doesn t exist so many products in stock");
                 }
-                newstock=null;
+                newstock = null;
             }
-            if (verifyIfAllQunatitiesAreZero(productQuantities2)==true) {
-                x=0;
+            if (verifyIfAllQunatitiesAreZero(productQuantities2) == true) {
+                x = 0;
             }
         }
         return responseProximityStrategies;
@@ -85,7 +97,7 @@ public class Proximity implements Strategy {
     public List<Location> getLocation(OrderDTOCreation orderDTOCreation) {
         List<String> locationList = new ArrayList<>();
         List<Location> alllocations = locationRepository.findAll(); //list with all the locations
-        String orderaddress = orderDTOCreation.getAddress().getCountry()+"," + orderDTOCreation.getAddress().getCounty()+"," + orderDTOCreation.getAddress().getCity()+"," + orderDTOCreation.getAddress().getStreetAddress();
+        String orderaddress = orderDTOCreation.getAddress().getCountry() + "," + orderDTOCreation.getAddress().getCounty() + "," + orderDTOCreation.getAddress().getCity() + "," + orderDTOCreation.getAddress().getStreetAddress();
         locationList.add(orderaddress);
         locationList.addAll(alllocations.stream().map(location -> location.getAddress().getCounty() + "," + location.getAddress().getCounty() + "," + location.getAddress().getCity() + "," + location.getAddress().getStreetAddress()).collect(Collectors.toList()));
         DistanceResponseDTO distanceResponseDTO = getDistance(locationList);
@@ -103,7 +115,7 @@ public class Proximity implements Strategy {
 
 
     public DistanceResponseDTO getDistance(List<String> locationList) {
-        String routematrixURL=routeMatrix.getUrl()+routeMatrix.getKey();
+        String routematrixURL = routeMatrix.getUrl() + routeMatrix.getKey();
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<DistanceRequestDTO> request = new HttpEntity<>(new DistanceRequestDTO(locationList, true));
         ResponseEntity<DistanceResponseDTO> responseDTOResponseEntity = restTemplate.exchange(routematrixURL, HttpMethod.POST, request, DistanceResponseDTO.class);
@@ -123,7 +135,8 @@ public class Proximity implements Strategy {
         }
         return locationListinorder;
     }
-    public final  List<ProductQuantity> makingcopiesofOrderCreation(OrderDTOCreation orderDTOCreation) {
+
+    public final List<ProductQuantity> makingcopiesofOrderCreation(OrderDTOCreation orderDTOCreation) {
         List<ProductQuantity> productQuantities = orderDTOCreation.getProductQunatityList();
         List<ProductQuantity> finallist = new ArrayList<>();
         for (ProductQuantity p : productQuantities) {
@@ -132,9 +145,9 @@ public class Proximity implements Strategy {
         return finallist;
 
     }
-   public boolean verifyIfAllQunatitiesAreZero(List<ProductQuantity> productQuantities){
-        int x=0;
-       return productQuantities.stream().allMatch(productQuantity -> productQuantity.getQuantity()==0);
+
+    public boolean verifyIfAllQunatitiesAreZero(List<ProductQuantity> productQuantities) {
+        return productQuantities.stream().allMatch(productQuantity -> productQuantity.getQuantity() == 0);
 
     }
 }

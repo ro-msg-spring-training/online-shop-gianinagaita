@@ -15,41 +15,34 @@ public class ProductController {
     }
 
     //get all product
-    @RequestMapping(value = "/products", method = RequestMethod.GET)
+    @GetMapping(value = "/products")
     public List<ProductDTO> getAllProducts() {
         return productServices.getAllProducts();
     }
 
     //update product
-    @RequestMapping(value = "/products/{id}", method = RequestMethod.PUT)
+    @PutMapping(value = "/products/{id}")
     public ProductDTO updateProduct(@RequestBody ProductDTO productDTO) {
         return productServices.updateProduct(productDTO);
         // return new ResponseEntity<>("Product is updated successsfully", HttpStatus.OK);
     }
 
     //get one single product
-    @RequestMapping(value = "/products/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/products/{id}")
     public ProductDTO getProduct(@PathVariable("id") Long id) {
         return productServices.getProduct(id);
 
     }
 
     //create product
-    @RequestMapping(value = "/products", method = RequestMethod.POST)
+    @PostMapping(value = "/products")
     public ProductDTO createProduct(@RequestBody ProductDTO productDTO) {
         return productServices.createProduct(productDTO);
         // return new ResponseEntity<>("Product is created successfully", HttpStatus.CREATED);
     }
 
-    //deleting the product
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
-    public void deleteProduct(ProductDTO productDTO) {
-        productServices.deleteProduct(productDTO);
-        //return new ResponseEntity<>("Product is deleted successsfully", HttpStatus.OK);
-    }
-
     //deleting by id
-    @RequestMapping(value = "/products/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/products/{id}")
     public void deleteProductById(@PathVariable("id") Long id) {
         productServices.deleteProductById(id);
         // return new ResponseEntity<>("Product is deleted successsfully by id ", HttpStatus.OK);

@@ -10,13 +10,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 @Component
 public class CSVconverter extends AbstractGenericHttpMessageConverter {
-    //    public CSVconverter(MediaType supportedMediaType) {
-//        super(supportedMediaType);
-//    }
     UtilsCSV methodsCSV = new UtilsCSV();
 
     public CSVconverter() {
@@ -25,7 +22,12 @@ public class CSVconverter extends AbstractGenericHttpMessageConverter {
 
     @Override
     protected void writeInternal(Object o, Type type, HttpOutputMessage httpOutputMessage) throws IOException, HttpMessageNotWritableException {
-        List<Object> objectArrayList = (ArrayList) o;
+        List<Object> objectArrayList;
+        if (o instanceof ArrayList) {
+            objectArrayList = new ArrayList<>((ArrayList<Object>) o);
+        } else {
+            objectArrayList = Collections.singletonList(o);
+        }
         methodsCSV.toCsv(o.getClass(), objectArrayList, httpOutputMessage.getBody());
     }
 
@@ -39,4 +41,6 @@ public class CSVconverter extends AbstractGenericHttpMessageConverter {
     public Object read(Type type, Class aClass, HttpInputMessage httpInputMessage) throws IOException, HttpMessageNotReadableException {
         return readInternal(aClass, httpInputMessage);
     }
+
+
 }
